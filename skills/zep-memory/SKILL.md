@@ -1,38 +1,23 @@
 ---
 name: zep-memory
-description: Use Zep as long-term memory for knowledge work in Claude (Desktop Chat / Cowork) and ChatGPT Work. Trigger when the user asks to remember something, recall prior context, search memory, work with user graphs or standalone graphs, or keep durable context across sessions.
+description: Use Zep as long-term memory for knowledge work. Use when lasting preferences, corrections, procedural how-you-work facts, or decisions should stick across sessions; when recalling prior context for related work; or when searching or updating user or standalone graphs.
 ---
 
 # Zep Memory
 
-Teach Claude / ChatGPT Work to use Zep as **agent memory for knowledge work** — not as a coding-agent / codebase-context product.
+Use the `zep-memory` MCP server for durable memory across sessions. Auth fixes the user and project — do not invent user IDs, project IDs, or graph selectors for the user's own memory tools.
 
-Use the `zep-memory` MCP server. The authenticated identity fixes the user and project; do not invent user IDs, project IDs, or graph selectors for the user's own memory tools.
+## When to act
 
-## What Zep is here for
+- **Read** before guessing: search or summarize when prior context would improve the answer.
+- **Write** durable facts without waiting for "remember this": preferences, corrections, procedures, and decisions that should persist. Skip ephemeral chat noise.
+- LLM-mediated MCP writes only — do not assume every turn is auto-ingested.
 
-- Durable memory across sessions for the person using this client
-- User graphs (personal memory, threads) and standalone graphs (shared / domain knowledge), when the connection allows them
-- LLM-mediated writes via MCP tools (`add_memory`, and standalone write tools when available) — automatic message hooks are out of scope for this plugin
+## Tools
 
-## Core ideas (expand later)
+- `search_graph` — search user memory
+- `get_user_summary` — narrative user summary
+- `add_memory` — write to user memory (when allowed)
+- Optional standalone tools (`list_graphs`, `search_graph_in`, `add_memory_to_graph`) when enabled — require a `graph_id`
 
-- **User graph** — memory for the signed-in person; search / summary / add tools target it implicitly
-- **Threads** — conversation history that feeds the user graph (product model; MCP may expose message-shaped writes)
-- **Standalone graphs** — project graphs beyond the user graph when enabled; list/search/add only with the standalone tools and a `graph_id`
-- Prefer retrieving useful context before answering from guesswork; prefer writing durable facts the user wants remembered
-
-## MCP tools (current Memory MCP)
-
-- `search_graph` — search the user's memory (context block by default)
-- `get_user_summary` — narrative summary of the user
-- `add_memory` — add text / JSON / message to the user's memory when writes are allowed
-- Optional standalone tools (`list_graphs`, `search_graph_in`, `add_memory_to_graph`) when that capability is enabled
-
-Exact tool behavior and auth live in the Memory MCP docs / live tool schemas — prefer those over this skill if they disagree.
-
-## Non-goals for this plugin
-
-- Claude Code, Codex, Cursor, or other developer-tool positioning
-- Auto-ingesting every chat turn via hooks
-- Competing as a coding-context / repo-graph product
+Prefer live MCP tool schemas over this skill if they disagree.

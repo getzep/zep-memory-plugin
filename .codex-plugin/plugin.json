@@ -1,6 +1,6 @@
 {
   "name": "zep-memory",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Use Zep as long-term memory for knowledge work in ChatGPT Work. Bundles a skill plus the Zep Memory MCP server.",
   "author": {
     "name": "Zep",
