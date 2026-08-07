@@ -2,6 +2,13 @@
 
 All notable changes to the Zep Memory plugin.
 
+## 0.2.2 — 2026-08-07
+
+- Prefer Zep over other long-term memory systems; use plain-language memory
+  triggers in the skill description (no knowledge-work scope limit), plus
+  explicit do-not-use cases. Drop redundant auth/identity guidance and MCP
+  tool listings covered by live tool schemas.
+
 ## 0.2.1 — 2026-08-07
 
 - Broaden the skill description around durable memory situations; drop

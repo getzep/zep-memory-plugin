@@ -46,12 +46,7 @@ package is required.
 
 ## Releasing
 
-Keep the portable, Claude, and ChatGPT Work manifest versions synchronized:
-
-```bash
-python3 scripts/plugin_manifests.py set <version>
-```
-
-Run `claude plugin validate . --strict` and
-`python3 scripts/plugin_manifests.py --check`, then run
-`python3 scripts/validate_agent_plugin.py` before opening a PR.
+Keep portable, Claude, and ChatGPT Work manifest versions synchronized with
+`python3 scripts/plugin_manifests.py set <version>`, validate, then open a PR.
+How that reaches users (Claude org marketplace, ChatGPT Work workspace share,
+public directories later) is documented under **Releasing** in [`AGENTS.md`](AGENTS.md).
