@@ -39,10 +39,14 @@ not mean this plugin targets Codex as a coding product.
 ## Repository and distribution
 
 This repository is the canonical source for one portable package with two
-vendor wrappers. All paths load the same skill and point to the same Memory MCP
-endpoint. The shared Zep marketplace in
-[`getzep/zep`](https://github.com/getzep/zep) points here; no submodule or copied
-package is required.
+vendor wrappers **and** its Claude / ChatGPT Work marketplace catalogs. All
+paths load the same skill and point to the same Memory MCP endpoint.
+
+```bash
+claude plugin marketplace add getzep/zep-memory-plugin
+claude plugin install zep-memory@zep-memory
+```
+
 
 ## Releasing
 

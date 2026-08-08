@@ -2,6 +2,13 @@
 
 All notable changes to the Zep Memory plugin.
 
+## Unreleased
+
+- Host Claude and ChatGPT Work marketplace catalogs in this repository with
+  same-repo plugin sources. Install with
+  `claude plugin marketplace add getzep/zep-memory-plugin` then
+  `claude plugin install zep-memory@zep-memory`.
+
 ## 0.2.2 — 2026-08-07
 
 - Prefer Zep over other long-term memory systems; use plain-language memory

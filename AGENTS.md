@@ -22,8 +22,10 @@ wrappers for Claude Desktop Chat / Cowork and ChatGPT Work.
 - Keep `mcp.json` pointed at that endpoint using the Agent Plugins
   `streamable-http` transport and canonical 1.0.0 schema.
 - Do not add Cursor packaging unless the product scope explicitly expands.
-- The shared marketplace remains in `getzep/zep` and points at this repository.
-  Do not add submodules or duplicate the plugin back into that marketplace repo.
+- This repository hosts its own marketplace catalogs
+  (`.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`).
+  Plugin `source` entries must stay same-repo paths (`./`) so install does not
+  require a second GitHub clone.
 
 ## Releasing
 
@@ -33,8 +35,17 @@ For runtime content changes (skill, manifests, MCP package config):
 
 1. Run `python3 scripts/plugin_manifests.py set <version>`.
 2. Add a `CHANGELOG.md` entry.
-3. Run `claude plugin validate . --strict`.
-4. Run `python3 scripts/plugin_manifests.py --check`.
+3. Validate the Claude plugin package and the marketplace catalog separately.
+   With both files under `.claude-plugin/`, `claude plugin validate .` only
+   checks the marketplace:
+
+   ```bash
+   claude plugin validate .claude-plugin/plugin.json --strict
+   claude plugin validate . --strict
+   ```
+
+4. Run `python3 scripts/plugin_manifests.py --check` (includes marketplace
+   same-repo source checks).
 5. Run `python3 scripts/validate_agent_plugin.py` and confirm
    `.github/workflows/test-plugin.yml` passes.
 6. Open a PR and merge to the default branch.
@@ -66,14 +77,16 @@ manual ZIP marketplace and/or a private GitHub-synced marketplace.
 - **Manual ZIP upload:** uploading a package with the same plugin name
   overwrites the previous org copy; no GitHub merge required for that path.
 
-#### Custom / Zep-hosted Claude marketplace (`getzep/zep`)
+#### This repository as Claude marketplace
 
-The shared marketplace in [`getzep/zep`](https://github.com/getzep/zep) points
-at this repository (no submodule or copied package). Users refresh marketplace
-data (or rely on marketplace auto-update) to see new versions. Catalog or
-source-ref edits in `getzep/zep` are only needed when the marketplace entry
-itself changes — not for ordinary plugin version bumps here. This is still
-not Anthropic's official marketplace.
+```bash
+claude plugin marketplace add getzep/zep-memory-plugin
+claude plugin install zep-memory@zep-memory
+```
+
+Marketplace entries must stay free of `version`; the host resolves the release
+from this package's manifests. Ordinary plugin releases do not need a separate
+marketplace PR elsewhere. This is still not Anthropic's official marketplace.
 
 #### Anthropic official marketplace (later)
 
