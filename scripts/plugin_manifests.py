@@ -44,10 +44,15 @@ PLUGINS: list[PluginSpec] = [
         version_sites=[
             ("plugin.json", "manifest", "Agent Plugins manifest"),
             (".claude-plugin/plugin.json", "manifest", "Claude plugin manifest"),
-            (".codex-plugin/plugin.json", "manifest", "ChatGPT Work plugin manifest"),
+            (
+                "plugins/zep-memory/.codex-plugin/plugin.json",
+                "manifest",
+                "ChatGPT Work plugin manifest",
+            ),
         ],
         mcp_sites=[
-            (".mcp.json", "Claude + ChatGPT Work (.mcp.json)"),
+            (".mcp.json", "Claude (.mcp.json)"),
+            ("plugins/zep-memory/.mcp.json", "ChatGPT Work (.mcp.json)"),
             ("mcp.json", "Agent Plugins (mcp.json)"),
         ],
         mcp_server_name="zep-memory",
@@ -77,7 +82,7 @@ MARKETPLACE_SITES: list[tuple[str, str, object]] = [
     (
         ".agents/plugins/marketplace.json",
         "zep-memory",
-        {"source": "local", "path": "./"},
+        {"source": "local", "path": "./plugins/zep-memory"},
     ),
 ]
 

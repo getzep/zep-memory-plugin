@@ -9,23 +9,23 @@ wrappers for Claude Desktop Chat / Cowork and ChatGPT Work.
 - Keep the plugin name `zep-memory` and version identical in:
   - `plugin.json`
   - `.claude-plugin/plugin.json`
-  - `.codex-plugin/plugin.json`
+  - `plugins/zep-memory/.codex-plugin/plugin.json`
 - Keep root `plugin.json` and `mcp.json` conformant to Agent Plugins 1.0.0.
-- Preserve `.claude-plugin/plugin.json` and `.mcp.json`; Claude support must not
-  depend on Claude adopting the portable format.
-- Preserve `.codex-plugin/plugin.json` and `.mcp.json`; OpenAI support must not
-  depend on OpenAI adopting the portable format.
+- Preserve `.claude-plugin/plugin.json` and root `.mcp.json`; Claude support
+  must not depend on Claude adopting the portable format.
+- Keep the ChatGPT Work package under `plugins/zep-memory/`
+  (`.codex-plugin/plugin.json`, `.mcp.json`, and `skills` → `../../skills`).
+  OpenAI support must not depend on OpenAI adopting the portable format.
 - `.codex-plugin/` is the package format used by ChatGPT Work; this plugin is not
   positioned for Codex coding workflows.
-- Keep `.mcp.json` pointed at the production Zep Memory MCP endpoint:
-  `https://api.getzep.com/mcp` using remote HTTP transport.
-- Keep `mcp.json` pointed at that endpoint using the Agent Plugins
-  `streamable-http` transport and canonical 1.0.0 schema.
+- Keep every `.mcp.json` and `mcp.json` pointed at the production Zep Memory MCP
+  endpoint `https://api.getzep.com/mcp` (HTTP / `streamable-http` as required).
 - Do not add Cursor packaging unless the product scope explicitly expands.
 - This repository hosts its own marketplace catalogs
   (`.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`).
-  Plugin `source` entries must stay same-repo paths (`./`) so install does not
-  require a second GitHub clone.
+  Plugin `source` entries must stay same-repo paths so install does not require
+  a second GitHub clone: Claude uses `./`; ChatGPT Work uses
+  `./plugins/zep-memory` (OpenAI rejects local `source.path` of `"./"`).
 
 ## Releasing
 
@@ -102,9 +102,10 @@ Not the universal public Plugins Directory.
   Share to members or groups. GitHub merge alone does not propagate the
   package; re-share or refresh the local install as needed.
 - **Local / repo / personal marketplaces** (`.agents/plugins/marketplace.json`
-  or git-backed marketplace sources): update the plugin files or marketplace
-  source, then restart / refresh so the host reloads the package. OpenAI
-  caches installed copies by marketplace + name + version.
+  or git-backed marketplace sources): the entry's `source.path` must be
+  `./plugins/zep-memory` (not `"./"`). Update the nested package or marketplace
+  source, then restart / refresh so the host reloads. OpenAI caches installed
+  copies by marketplace + name + version.
 
 #### OpenAI universal public Plugins Directory (later)
 

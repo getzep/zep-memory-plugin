@@ -9,7 +9,7 @@
       "name": "zep-memory",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/zep-memory"
       },
       "description": "Long-term memory for knowledge work via the Zep Memory MCP server."
     }
