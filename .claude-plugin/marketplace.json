@@ -1,0 +1,24 @@
+{
+  "name": "zep-memory",
+  "owner": {
+    "name": "Zep",
+    "url": "https://www.getzep.com"
+  },
+  "metadata": {
+    "description": "Claude marketplace for the Zep Memory plugin. The plugin package lives in this same repository."
+  },
+  "plugins": [
+    {
+      "name": "zep-memory",
+      "source": "./",
+      "description": "Long-term memory for knowledge work via the Zep Memory MCP server.",
+      "category": "productivity",
+      "keywords": [
+        "zep",
+        "agent-memory",
+        "mcp",
+        "knowledge-work"
+      ]
+    }
+  ]
+}

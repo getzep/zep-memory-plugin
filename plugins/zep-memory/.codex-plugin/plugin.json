@@ -1,0 +1,27 @@
+{
+  "name": "zep-memory",
+  "version": "0.2.3",
+  "description": "Use Zep as long-term memory for knowledge work in ChatGPT Work. Bundles a skill plus the Zep Memory MCP server.",
+  "author": {
+    "name": "Zep",
+    "url": "https://www.getzep.com"
+  },
+  "homepage": "https://help.getzep.com/memory-mcp-server",
+  "keywords": ["zep", "agent-memory", "mcp", "knowledge-work"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Zep Memory",
+    "shortDescription": "Long-term memory for knowledge work, backed by Zep.",
+    "longDescription": "Connect ChatGPT Work to your Zep memory so it can search and, when allowed, add to your user graph — and use standalone graphs when your project enables them.",
+    "developerName": "Zep",
+    "category": "Productivity",
+    "capabilities": ["Interactive"],
+    "websiteURL": "https://help.getzep.com/memory-mcp-server",
+    "defaultPrompt": [
+      "What do you remember about me?",
+      "Search my Zep memory for relevant context on this topic.",
+      "Save this to my Zep memory."
+    ]
+  }
+}
