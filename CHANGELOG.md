@@ -9,6 +9,12 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.6 — 2026-08-13
+
+- Tell the assistant to apply retrieved user preferences to the current
+  response, while staying inside Anthropic Directory Policy and OpenAI skill
+  scan rules (context, not executable instructions; no host-memory access).
+
 ## 0.2.5 — 2026-08-13
 
 - Use `plugins/zep-memory/` as the single plugin root for Agent Plugins,
