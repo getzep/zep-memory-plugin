@@ -9,6 +9,12 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.5 — 2026-08-13
+
+- Use `plugins/zep-memory/` as the single plugin root for Agent Plugins,
+  Claude, and ChatGPT Work. Removes the second skill copy and the sync
+  script. Claude marketplace `source` is now `./plugins/zep-memory`.
+
 ## 0.2.4 — 2026-08-13
 
 - Ship a real `plugins/zep-memory/skills/` tree instead of a symlink to the

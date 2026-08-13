@@ -9,7 +9,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
-ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT / "plugins" / "zep-memory"
 PLUGIN_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
 NAME_RE = re.compile(r"^(?!.*(?:--|\.\.))[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$")
@@ -159,7 +160,10 @@ def main() -> int:
     except ValueError as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 1
-    print("OK — Agent Plugins 1.0.0 manifest and MCP configuration")
+    print(
+        "OK — Agent Plugins 1.0.0 manifest and MCP configuration "
+        "(plugins/zep-memory)"
+    )
     return 0
 
 

@@ -4,7 +4,6 @@
 Usage:
     python3 scripts/plugin_manifests.py --check
     python3 scripts/plugin_manifests.py set 0.2.0
-    python3 scripts/plugin_manifests.py sync-skills
     python3 scripts/plugin_manifests.py version
     python3 scripts/plugin_manifests.py require-newer 0.2.0 0.1.0
 """
@@ -43,8 +42,16 @@ PLUGINS: list[PluginSpec] = [
     PluginSpec(
         name="zep-memory",
         version_sites=[
-            ("plugin.json", "manifest", "Agent Plugins manifest"),
-            (".claude-plugin/plugin.json", "manifest", "Claude plugin manifest"),
+            (
+                "plugins/zep-memory/plugin.json",
+                "manifest",
+                "Agent Plugins manifest",
+            ),
+            (
+                "plugins/zep-memory/.claude-plugin/plugin.json",
+                "manifest",
+                "Claude plugin manifest",
+            ),
             (
                 "plugins/zep-memory/.codex-plugin/plugin.json",
                 "manifest",
@@ -52,12 +59,11 @@ PLUGINS: list[PluginSpec] = [
             ),
         ],
         mcp_sites=[
-            (".mcp.json", "Claude (.mcp.json)"),
-            ("plugins/zep-memory/.mcp.json", "ChatGPT Work (.mcp.json)"),
-            ("mcp.json", "Agent Plugins (mcp.json)"),
+            ("plugins/zep-memory/.mcp.json", "Claude / ChatGPT Work (.mcp.json)"),
+            ("plugins/zep-memory/mcp.json", "Agent Plugins (mcp.json)"),
         ],
         mcp_server_name="zep-memory",
-        validate_path=".claude-plugin/plugin.json",
+        validate_path="plugins/zep-memory/.claude-plugin/plugin.json",
     ),
 ]
 PLUGINS_BY_NAME = {plugin.name: plugin for plugin in PLUGINS}
@@ -79,7 +85,7 @@ FORBIDDEN_SITES: list[tuple[str, str, str]] = [
 ]
 
 MARKETPLACE_SITES: list[tuple[str, str, object]] = [
-    (".claude-plugin/marketplace.json", "zep-memory", "./"),
+    (".claude-plugin/marketplace.json", "zep-memory", "./plugins/zep-memory"),
     (
         ".agents/plugins/marketplace.json",
         "zep-memory",
@@ -87,12 +93,10 @@ MARKETPLACE_SITES: list[tuple[str, str, object]] = [
     ),
 ]
 
-# Canonical skill lives at the Agent Plugins root. ChatGPT Work installs only
-# plugins/zep-memory/, and Codex/ChatGPT drop outbound symlinks on copy
-# (openai/codex#24770), so that package must contain a real skills/ tree.
-CANONICAL_SKILL = Path("skills/zep-memory/SKILL.md")
-CHATGPT_SKILLS_ROOT = Path("plugins/zep-memory/skills")
-CHATGPT_SKILL = CHATGPT_SKILLS_ROOT / "zep-memory" / "SKILL.md"
+# Repo-root leftovers from when the Agent Plugins / Claude package lived at ./
+# ChatGPT cannot use source.path "./", so plugins/zep-memory/ is the one root.
+FORBIDDEN_ROOT_PACKAGE_PATHS = ("plugin.json", "mcp.json", ".mcp.json", "skills")
+PLUGIN_SKILL = Path("plugins/zep-memory/skills/zep-memory/SKILL.md")
 
 
 class SiteError(Exception):
@@ -250,67 +254,23 @@ def check_plugin(plugin: PluginSpec, problems: list[str]) -> None:
         )
 
 
-def _is_symlink_or_through_symlink(path: Path) -> bool:
-    """True if path, or any ancestor under REPO_ROOT, is a symlink."""
-    try:
-        path.relative_to(REPO_ROOT)
-    except ValueError:
-        return path.is_symlink()
-    current = path
-    while current != REPO_ROOT:
-        if current.is_symlink():
-            return True
-        current = current.parent
-    return False
-
-
-def check_chatgpt_skill_copy(problems: list[str]) -> None:
-    """Require a real ChatGPT Work skill copy, not a symlink to the shared tree."""
-    src = REPO_ROOT / CANONICAL_SKILL
-    dest_root = REPO_ROOT / CHATGPT_SKILLS_ROOT
-    dest = REPO_ROOT / CHATGPT_SKILL
-    if not src.is_file() or _is_symlink_or_through_symlink(src):
+def check_single_plugin_root(problems: list[str]) -> None:
+    """Require one plugin root at plugins/zep-memory/ with a real skill file."""
+    for rel in FORBIDDEN_ROOT_PACKAGE_PATHS:
+        if (REPO_ROOT / rel).exists():
+            problems.append(
+                f"{rel}: must not exist at repo root — the plugin root is "
+                "plugins/zep-memory/"
+            )
+    skill = REPO_ROOT / PLUGIN_SKILL
+    skills_dir = skill.parent.parent
+    if skills_dir.is_symlink() or skill.is_symlink() or skill.parent.is_symlink():
         problems.append(
-            f"{CANONICAL_SKILL}: canonical skill is missing or is a symlink"
+            f"{PLUGIN_SKILL}: must be a real file, not a symlink "
+            "(Codex/ChatGPT drop outbound symlinks on install)"
         )
-        return
-    if dest_root.is_symlink() or dest.is_symlink() or dest.parent.is_symlink():
-        problems.append(
-            f"{CHATGPT_SKILLS_ROOT}: must be a real directory, not a symlink "
-            "(Codex/ChatGPT silently drop outbound symlinks on install; "
-            "see openai/codex#24770). Run: "
-            "python3 scripts/plugin_manifests.py sync-skills"
-        )
-        return
-    if not dest.is_file():
-        problems.append(
-            f"{CHATGPT_SKILL}: missing materialized ChatGPT Work skill. Run: "
-            "python3 scripts/plugin_manifests.py sync-skills"
-        )
-        return
-    if dest.read_bytes() != src.read_bytes():
-        problems.append(
-            f"{CHATGPT_SKILL}: drifted from {CANONICAL_SKILL}. Run: "
-            "python3 scripts/plugin_manifests.py sync-skills"
-        )
-
-
-def sync_chatgpt_skills() -> int:
-    """Copy the canonical skill into the ChatGPT Work package as real files."""
-    src = REPO_ROOT / CANONICAL_SKILL
-    dest_root = REPO_ROOT / CHATGPT_SKILLS_ROOT
-    dest = REPO_ROOT / CHATGPT_SKILL
-    if not src.is_file():
-        print(f"{CANONICAL_SKILL}: canonical skill is missing", file=sys.stderr)
-        return 1
-    if dest_root.is_symlink() or (dest_root.exists() and not dest_root.is_dir()):
-        dest_root.unlink()
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    if dest.is_symlink() or dest.exists():
-        dest.unlink()
-    dest.write_bytes(src.read_bytes())
-    print(f"copied {CANONICAL_SKILL} -> {CHATGPT_SKILL}")
-    return 0
+    elif not skill.is_file():
+        problems.append(f"{PLUGIN_SKILL}: missing")
 
 
 def check_marketplaces(problems: list[str]) -> None:
@@ -350,7 +310,7 @@ def check() -> int:
         print()
 
     check_marketplaces(problems)
-    check_chatgpt_skill_copy(problems)
+    check_single_plugin_root(problems)
 
     for rel_path, kind, why in FORBIDDEN_SITES:
         try:
@@ -444,9 +404,6 @@ def set_version(plugin: PluginSpec, new_version: str) -> int:
         path.write_text(new_text)
         print(f"  {old} -> {new_version:<8} {label}")
 
-    if sync_chatgpt_skills() != 0:
-        return 1
-
     print(f"\nBumped {plugin.name} to {new_version}. Next:")
     print("  1. add a CHANGELOG.md entry describing what users get")
     print(f"  2. claude plugin validate {plugin.validate_path} --strict")
@@ -486,8 +443,6 @@ def resolve_plugin(name: str | None) -> PluginSpec:
 def main(argv: list[str]) -> int:
     if argv[1:] == ["--check"]:
         return check()
-    if argv[1:] == ["sync-skills"]:
-        return sync_chatgpt_skills()
     if len(argv) == 3 and argv[1] == "set":
         return set_version(DEFAULT_PLUGIN, argv[2])
     if len(argv) == 4 and argv[1] == "set":
