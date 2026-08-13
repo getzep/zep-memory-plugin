@@ -1,21 +1,28 @@
 # Zep Memory plugin maintainer instructions
 
-This repository root is one Agent Plugins 1.0.0 package with compatibility
-wrappers for Claude Desktop Chat / Cowork and ChatGPT Work.
+This repository hosts marketplace catalogs at the root and **one plugin
+package** at `plugins/zep-memory/`. That directory is the plugin root for
+Agent Plugins 1.0.0, Claude Desktop Chat / Cowork, and ChatGPT Work.
 
 ## Package architecture
 
-- Keep one shared `skills/zep-memory/` tree; do not create vendor-specific copies.
+- Keep a single plugin root: `plugins/zep-memory/`. Do not put `plugin.json`,
+  `mcp.json`, `.mcp.json`, or `skills/` at the repository root (ChatGPT
+  rejects marketplace `source.path` of `"./"`).
+- Keep one skill file: `plugins/zep-memory/skills/zep-memory/SKILL.md`.
+  Do not symlink it outside the plugin root — Codex/ChatGPT drop outbound
+  symlinks on install (openai/codex#24770).
 - Keep the plugin name `zep-memory` and version identical in:
-  - `plugin.json`
-  - `.claude-plugin/plugin.json`
+  - `plugins/zep-memory/plugin.json`
+  - `plugins/zep-memory/.claude-plugin/plugin.json`
   - `plugins/zep-memory/.codex-plugin/plugin.json`
-- Keep root `plugin.json` and `mcp.json` conformant to Agent Plugins 1.0.0.
-- Preserve `.claude-plugin/plugin.json` and root `.mcp.json`; Claude support
-  must not depend on Claude adopting the portable format.
-- Keep the ChatGPT Work package under `plugins/zep-memory/`
-  (`.codex-plugin/plugin.json`, `.mcp.json`, and `skills` → `../../skills`).
-  OpenAI support must not depend on OpenAI adopting the portable format.
+- Keep `plugins/zep-memory/plugin.json` and `plugins/zep-memory/mcp.json`
+  conformant to Agent Plugins 1.0.0.
+- Preserve `plugins/zep-memory/.claude-plugin/plugin.json` and
+  `plugins/zep-memory/.mcp.json`; Claude support must not depend on Claude
+  adopting the portable format.
+- Preserve `plugins/zep-memory/.codex-plugin/plugin.json`; OpenAI support
+  must not depend on OpenAI adopting the portable format.
 - `.codex-plugin/` is the package format used by ChatGPT Work; this plugin is not
   positioned for Codex coding workflows.
 - Keep every `.mcp.json` and `mcp.json` pointed at the production Zep Memory MCP
@@ -24,8 +31,7 @@ wrappers for Claude Desktop Chat / Cowork and ChatGPT Work.
 - This repository hosts its own marketplace catalogs
   (`.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`).
   Plugin `source` entries must stay same-repo paths so install does not require
-  a second GitHub clone: Claude uses `./`; ChatGPT Work uses
-  `./plugins/zep-memory` (OpenAI rejects local `source.path` of `"./"`).
+  a second GitHub clone. Both catalogs point at `./plugins/zep-memory`.
 
 ## Releasing
 
@@ -36,11 +42,11 @@ For runtime content changes (skill, manifests, MCP package config):
 1. Run `python3 scripts/plugin_manifests.py set <version>`.
 2. Add a `CHANGELOG.md` entry.
 3. Validate the Claude plugin package and the marketplace catalog separately.
-   With both files under `.claude-plugin/`, `claude plugin validate .` only
-   checks the marketplace:
+   Repo-root `.claude-plugin/` is the marketplace only;
+   `claude plugin validate .` checks the catalog:
 
    ```bash
-   claude plugin validate .claude-plugin/plugin.json --strict
+   claude plugin validate plugins/zep-memory/.claude-plugin/plugin.json --strict
    claude plugin validate . --strict
    ```
 
@@ -103,7 +109,7 @@ Not the universal public Plugins Directory.
   package; re-share or refresh the local install as needed.
 - **Local / repo / personal marketplaces** (`.agents/plugins/marketplace.json`
   or git-backed marketplace sources): the entry's `source.path` must be
-  `./plugins/zep-memory` (not `"./"`). Update the nested package or marketplace
+  `./plugins/zep-memory` (not `"./"`). Update the package or marketplace
   source, then restart / refresh so the host reloads. OpenAI caches installed
   copies by marketplace + name + version.
 

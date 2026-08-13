@@ -21,27 +21,23 @@ Bundles:
 
 ## Packaging note
 
-The repository root conforms to
+`plugins/zep-memory/` is the **one plugin root** (ChatGPT cannot install a
+marketplace `source.path` of `"./"`). That directory conforms to
 [Agent Plugins 1.0.0](https://agent-plugins.org/): `plugin.json` identifies the
-portable package, `skills/` contains the shared skill, and `mcp.json` declares
+portable package, `skills/` contains the skill, and `mcp.json` declares
 the Memory MCP server using the standard `streamable-http` transport.
 
 Claude and OpenAI compatibility does not depend on either vendor adopting that
-standard:
-
-- `.claude-plugin/plugin.json` and `.mcp.json` package the same components for
-  Claude Desktop Chat / Cowork.
-- `plugins/zep-memory/` holds the ChatGPT Work package (`.codex-plugin/`,
-  `.mcp.json`, and a `skills` link to the shared tree).
+standard. The same folder also holds `.claude-plugin/`, `.codex-plugin/`, and
+`.mcp.json`.
 
 `.codex-plugin/` is the ChatGPT Work package format. Keeping that manifest does
 not mean this plugin targets Codex as a coding product.
 
 ## Repository and distribution
 
-This repository is the canonical source for one portable package with two
-vendor wrappers **and** its Claude / ChatGPT Work marketplace catalogs. All
-paths load the same skill and point to the same Memory MCP endpoint.
+This repository is the catalog plus that one package. Both marketplace
+entries point at `./plugins/zep-memory`.
 
 ```bash
 claude plugin marketplace add getzep/zep-memory-plugin

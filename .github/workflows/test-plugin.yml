@@ -27,20 +27,25 @@ jobs:
           set -euo pipefail
           base="origin/${BASE_REF}"
           changed=$(git diff --name-only "$base"...HEAD -- \
-            plugin.json \
-            mcp.json \
-            .claude-plugin/plugin.json \
-            .codex-plugin/plugin.json \
-            .mcp.json \
-            skills/)
+            plugins/zep-memory/plugin.json \
+            plugins/zep-memory/mcp.json \
+            plugins/zep-memory/.claude-plugin/plugin.json \
+            plugins/zep-memory/.codex-plugin/plugin.json \
+            plugins/zep-memory/.mcp.json \
+            plugins/zep-memory/skills/)
           if [ -z "$changed" ]; then
             echo "No runtime changes; no version bump required."
             exit 0
           fi
           new=$(python3 scripts/plugin_manifests.py version)
-          old=$(git show "$base:plugin.json" 2>/dev/null \
-            | python3 -c 'import json,sys; print(json.load(sys.stdin).get("version", ""))' \
-            || echo "")
+          old=""
+          for path in plugins/zep-memory/plugin.json plugin.json; do
+            if git cat-file -e "$base:$path" 2>/dev/null; then
+              old=$(git show "$base:$path" \
+                | python3 -c 'import json,sys; print(json.load(sys.stdin).get("version", ""))')
+              break
+            fi
+          done
           if [ -z "$old" ]; then
             echo "Initial plugin release; no prior version to compare."
             exit 0

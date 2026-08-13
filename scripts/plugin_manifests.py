@@ -42,8 +42,16 @@ PLUGINS: list[PluginSpec] = [
     PluginSpec(
         name="zep-memory",
         version_sites=[
-            ("plugin.json", "manifest", "Agent Plugins manifest"),
-            (".claude-plugin/plugin.json", "manifest", "Claude plugin manifest"),
+            (
+                "plugins/zep-memory/plugin.json",
+                "manifest",
+                "Agent Plugins manifest",
+            ),
+            (
+                "plugins/zep-memory/.claude-plugin/plugin.json",
+                "manifest",
+                "Claude plugin manifest",
+            ),
             (
                 "plugins/zep-memory/.codex-plugin/plugin.json",
                 "manifest",
@@ -51,12 +59,11 @@ PLUGINS: list[PluginSpec] = [
             ),
         ],
         mcp_sites=[
-            (".mcp.json", "Claude (.mcp.json)"),
-            ("plugins/zep-memory/.mcp.json", "ChatGPT Work (.mcp.json)"),
-            ("mcp.json", "Agent Plugins (mcp.json)"),
+            ("plugins/zep-memory/.mcp.json", "Claude / ChatGPT Work (.mcp.json)"),
+            ("plugins/zep-memory/mcp.json", "Agent Plugins (mcp.json)"),
         ],
         mcp_server_name="zep-memory",
-        validate_path=".claude-plugin/plugin.json",
+        validate_path="plugins/zep-memory/.claude-plugin/plugin.json",
     ),
 ]
 PLUGINS_BY_NAME = {plugin.name: plugin for plugin in PLUGINS}
@@ -78,13 +85,18 @@ FORBIDDEN_SITES: list[tuple[str, str, str]] = [
 ]
 
 MARKETPLACE_SITES: list[tuple[str, str, object]] = [
-    (".claude-plugin/marketplace.json", "zep-memory", "./"),
+    (".claude-plugin/marketplace.json", "zep-memory", "./plugins/zep-memory"),
     (
         ".agents/plugins/marketplace.json",
         "zep-memory",
         {"source": "local", "path": "./plugins/zep-memory"},
     ),
 ]
+
+# Repo-root leftovers from when the Agent Plugins / Claude package lived at ./
+# ChatGPT cannot use source.path "./", so plugins/zep-memory/ is the one root.
+FORBIDDEN_ROOT_PACKAGE_PATHS = ("plugin.json", "mcp.json", ".mcp.json", "skills")
+PLUGIN_SKILL = Path("plugins/zep-memory/skills/zep-memory/SKILL.md")
 
 
 class SiteError(Exception):
@@ -242,6 +254,25 @@ def check_plugin(plugin: PluginSpec, problems: list[str]) -> None:
         )
 
 
+def check_single_plugin_root(problems: list[str]) -> None:
+    """Require one plugin root at plugins/zep-memory/ with a real skill file."""
+    for rel in FORBIDDEN_ROOT_PACKAGE_PATHS:
+        if (REPO_ROOT / rel).exists():
+            problems.append(
+                f"{rel}: must not exist at repo root — the plugin root is "
+                "plugins/zep-memory/"
+            )
+    skill = REPO_ROOT / PLUGIN_SKILL
+    skills_dir = skill.parent.parent
+    if skills_dir.is_symlink() or skill.is_symlink() or skill.parent.is_symlink():
+        problems.append(
+            f"{PLUGIN_SKILL}: must be a real file, not a symlink "
+            "(Codex/ChatGPT drop outbound symlinks on install)"
+        )
+    elif not skill.is_file():
+        problems.append(f"{PLUGIN_SKILL}: missing")
+
+
 def check_marketplaces(problems: list[str]) -> None:
     """Require marketplace catalogs to name this plugin with a same-repo source."""
     for rel_path, plugin_name, expected_source in MARKETPLACE_SITES:
@@ -279,6 +310,7 @@ def check() -> int:
         print()
 
     check_marketplaces(problems)
+    check_single_plugin_root(problems)
 
     for rel_path, kind, why in FORBIDDEN_SITES:
         try:
