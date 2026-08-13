@@ -5,7 +5,13 @@ wrappers for Claude Desktop Chat / Cowork and ChatGPT Work.
 
 ## Package architecture
 
-- Keep one shared `skills/zep-memory/` tree; do not create vendor-specific copies.
+- Keep `skills/zep-memory/` as the canonical skill (Agent Plugins + Claude).
+- Materialize a **real** copy at `plugins/zep-memory/skills/` for ChatGPT Work.
+  Do not use a symlink — Codex/ChatGPT silently drop outbound symlinks when
+  installing (openai/codex#24770), which ships a plugin with MCP config and
+  no skill. After editing the canonical skill, run
+  `python3 scripts/plugin_manifests.py sync-skills` (also runs on `set`).
+  `--check` fails if the copy is missing, a symlink, or drifted.
 - Keep the plugin name `zep-memory` and version identical in:
   - `plugin.json`
   - `.claude-plugin/plugin.json`
@@ -14,7 +20,7 @@ wrappers for Claude Desktop Chat / Cowork and ChatGPT Work.
 - Preserve `.claude-plugin/plugin.json` and root `.mcp.json`; Claude support
   must not depend on Claude adopting the portable format.
 - Keep the ChatGPT Work package under `plugins/zep-memory/`
-  (`.codex-plugin/plugin.json`, `.mcp.json`, and `skills` → `../../skills`).
+  (`.codex-plugin/plugin.json`, `.mcp.json`, and a real `skills/` directory).
   OpenAI support must not depend on OpenAI adopting the portable format.
 - `.codex-plugin/` is the package format used by ChatGPT Work; this plugin is not
   positioned for Codex coding workflows.

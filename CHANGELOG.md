@@ -9,6 +9,13 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.4 — 2026-08-13
+
+- Ship a real `plugins/zep-memory/skills/` tree instead of a symlink to the
+  shared skill. Codex/ChatGPT drop outbound symlinks on install, so 0.2.3
+  connected MCP but never exposed the `zep-memory` skill.
+- Word the skill around memory in general (not long-term / lasting / durable).
+
 ## 0.2.3 — 2026-08-07
 
 - Point the ChatGPT Work marketplace entry at `./plugins/zep-memory` (OpenAI

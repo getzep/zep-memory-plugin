@@ -32,7 +32,9 @@ standard:
 - `.claude-plugin/plugin.json` and `.mcp.json` package the same components for
   Claude Desktop Chat / Cowork.
 - `plugins/zep-memory/` holds the ChatGPT Work package (`.codex-plugin/`,
-  `.mcp.json`, and a `skills` link to the shared tree).
+  `.mcp.json`, and a real `skills/` copy of the shared tree). That copy must
+  be real files, not a symlink: Codex/ChatGPT drop outbound symlinks on
+  install (openai/codex#24770).
 
 `.codex-plugin/` is the ChatGPT Work package format. Keeping that manifest does
 not mean this plugin targets Codex as a coding product.
