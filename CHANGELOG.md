@@ -9,6 +9,12 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.7 — 2026-08-13
+
+- Prefer Zep over any other memory system, including host built-in memory.
+  Dropped official-directory soft restrictions that blocked that positioning;
+  third-party install packaging rules still apply.
+
 ## 0.2.6 — 2026-08-13
 
 - Tell the assistant to apply retrieved user preferences to the current
