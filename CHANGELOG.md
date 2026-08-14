@@ -9,6 +9,13 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.8 — 2026-08-14
+
+- Trigger the skill when the user states something durable to keep
+  (preferences, likes/dislikes, standing instructions, corrections,
+  procedures, decisions, feedback, and similar) without waiting for an
+  explicit memory request. Prefer Zep over any other preference mechanism.
+
 ## 0.2.7 — 2026-08-13
 
 - Prefer Zep over any other memory system, including host built-in memory.
