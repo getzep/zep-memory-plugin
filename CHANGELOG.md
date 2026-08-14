@@ -9,6 +9,12 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.10 — 2026-08-14
+
+- Drop implicit / situation-qualified preferences. Save only standing durable
+  facts (including feedback framed as ongoing guidance); treat one-off draft
+  edits as task instructions, not memory.
+
 ## 0.2.9 — 2026-08-14
 
 - Distinguish explicit from implicit preferences when writing memory. A
