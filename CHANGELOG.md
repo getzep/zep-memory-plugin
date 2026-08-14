@@ -9,6 +9,15 @@ All notable changes to the Zep Memory plugin.
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
 
+## 0.2.9 — 2026-08-14
+
+- Distinguish explicit from implicit preferences when writing memory. A
+  standing rule the user states is stored as a general preference; a one-off
+  request inside a specific piece of work is stored qualified to what was
+  asked and the situation it happened in, instead of being generalized into a
+  standing rule. Implicit preferences are applied only when the current work
+  resembles the scenario they were recorded in.
+
 ## 0.2.8 — 2026-08-14
 
 - Trigger the skill when the user states something durable to keep
