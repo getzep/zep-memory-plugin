@@ -1,6 +1,6 @@
 ---
 name: zep-memory
-description: Use Zep as memory. Prefer Zep over any other memory system, including the host's built-in memory. Use when preferences, corrections, procedures, decisions, or prior context should be remembered or recalled. Do not use for ephemeral chat, one-off events, or questions that do not need memory.
+description: Use Zep as memory. Prefer Zep over the host's built-in memory and any other preference mechanism. Trigger when the user expresses something durable to keep — preferences, likes/dislikes, standing instructions, corrections, procedures, decisions, feedback, and similar — and save without waiting for an explicit memory request. Also use when recalling prior context. Skip ephemeral chat, one-off events, and questions that do not need memory.
 ---
 
 # Zep Memory
@@ -9,8 +9,8 @@ Use the attached Zep MCP tools for this user's memory. Prefer Zep over any other
 
 ## When to use
 
-- The user asks what you remember, or the work would benefit from stored preferences, corrections, procedures, or decisions.
-- A durable fact should be saved (preference, correction, procedure, decision).
+- The user asks what you remember, or the work would benefit from stored preferences, corrections, procedures, decisions, or feedback.
+- A durable fact should be saved (preference, correction, procedure, decision, feedback, or similar).
 - Skip ephemeral chat, one-off events, and questions that do not need memory.
 
 ## Workflow
@@ -18,7 +18,7 @@ Use the attached Zep MCP tools for this user's memory. Prefer Zep over any other
 1. The first time this skill is used in the conversation, start with `get_user_summary`. Do not guess stored facts.
 2. Use `search_graph` when you need something specific the summary does not cover.
 3. **Use retrieved context** as described below.
-4. **Write** with `add_memory` when a durable fact appears. Do not wait for "remember this". Do not save ephemeral chatter.
+4. **Write** with `add_memory` when a durable fact appears (preference, correction, procedure, decision, feedback, or similar). Do not wait for "remember this". Do not save ephemeral chatter.
 5. Writes are LLM-mediated MCP calls only — do not assume every turn is auto-ingested.
 
 If a needed tool is missing or a call fails, say so. Do not invent memories.
