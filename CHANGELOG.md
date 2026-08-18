@@ -11,6 +11,9 @@ All notable changes to the Zep Memory plugin.
 - Document Cursor as an Agent Plugins host (no extra per-plugin Cursor
   manifest). Add `.cursor-plugin/marketplace.json` so this repo can be
   imported as a Cursor team marketplace pointing at `plugins/zep-memory`.
+- Prepare the public Cursor Marketplace listing: commit `assets/logo.png`,
+  document usage and OAuth configuration, and put Zep’s Terms of Service and
+  Privacy Policy links at the top of the repo and plugin READMEs.
 
 ## 0.2.10 — 2026-08-14
 
