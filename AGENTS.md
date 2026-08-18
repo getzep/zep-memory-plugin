@@ -32,6 +32,14 @@ ChatGPT Work.
   `plugins/zep-memory/.cursor-plugin/` unless we need Cursor-only components
   (rules, agents, commands, hooks, or variables). Auth stays client-managed
   OAuth; do not put API keys or `${VAR}` headers in `mcp.json`.
+- Keep `plugins/zep-memory/assets/logo.png` and reference it from
+  `.cursor-plugin/marketplace.json` (`logo`: `assets/logo.png`). Agent Plugins
+  `plugin.json` has no logo field.
+- Keep Terms of Service and Privacy Policy links highly visible in
+  `README.md` and `plugins/zep-memory/README.md`, pointing at
+  https://www.getzep.com/legal/terms/ and
+  https://www.getzep.com/legal/privacy/. Do not invent a plugin-only legal
+  page; this plugin uses the Zep Memory API.
 - This repository hosts its own marketplace catalogs
   (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`,
   and `.cursor-plugin/marketplace.json`). Plugin `source` entries must stay
@@ -145,7 +153,10 @@ open Zep sign-in.
 - **Team marketplace:** import this GitHub repository. Cursor reads
   `.cursor-plugin/marketplace.json` and resolves `source` `zep-memory` under
   `pluginRoot` `plugins`.
-- **Official Cursor Marketplace (later):** submit the repository at
-  [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
-  Inclusion and updates are a Cursor review process, not "merge this repo and
-  it ships."
+- **Official Cursor Marketplace:** submit this GitHub repository at
+  [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish)
+  while signed into the Cursor account that should own the listing. Cursor
+  reviews identity, code, and every later update; request a re-index after
+  changes. Merging to GitHub does not publish or update the public listing.
+  The plugin must stay free, Apache-2.0, and public. Keep ToS/privacy links
+  visible in the READMEs.

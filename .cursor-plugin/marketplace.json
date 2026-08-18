@@ -12,7 +12,11 @@
     {
       "name": "zep-memory",
       "source": "zep-memory",
-      "description": "Long-term memory for knowledge work via the Zep Memory MCP server.",
+      "description": "Use Zep as long-term memory for knowledge work. Bundles a skill plus the Zep Memory MCP server.",
+      "logo": "assets/logo.png",
+      "homepage": "https://help.getzep.com/memory-mcp-server",
+      "repository": "https://github.com/getzep/zep-memory-plugin",
+      "license": "Apache-2.0",
       "category": "productivity",
       "keywords": [
         "zep",
