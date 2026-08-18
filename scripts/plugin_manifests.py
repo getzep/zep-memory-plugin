@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Keep Zep Memory's Claude and ChatGPT Work manifests synchronized.
+"""Keep Zep Memory's Claude, ChatGPT Work, and Cursor catalogs synchronized.
 
 Usage:
     python3 scripts/plugin_manifests.py --check
@@ -82,6 +82,11 @@ FORBIDDEN_SITES: list[tuple[str, str, str]] = [
         "entry",
         "marketplace entries must not declare version",
     ),
+    (
+        ".cursor-plugin/marketplace.json",
+        "entry",
+        "marketplace entries must not declare version",
+    ),
 ]
 
 MARKETPLACE_SITES: list[tuple[str, str, object]] = [
@@ -91,6 +96,7 @@ MARKETPLACE_SITES: list[tuple[str, str, object]] = [
         "zep-memory",
         {"source": "local", "path": "./plugins/zep-memory"},
     ),
+    (".cursor-plugin/marketplace.json", "zep-memory", "zep-memory"),
 ]
 
 # Repo-root leftovers from when the Agent Plugins / Claude package lived at ./
@@ -299,6 +305,16 @@ def check_marketplaces(problems: list[str]) -> None:
                 f"{rel_path}: plugins[{plugin_name}].source must be "
                 f"{expected_source!r}, got {source!r}"
             )
+        if rel_path == ".cursor-plugin/marketplace.json":
+            metadata = data.get("metadata")
+            plugin_root = (
+                metadata.get("pluginRoot") if isinstance(metadata, dict) else None
+            )
+            if plugin_root != "plugins":
+                problems.append(
+                    f"{rel_path}: metadata.pluginRoot must be 'plugins', "
+                    f"got {plugin_root!r}"
+                )
 
 
 def check() -> int:
