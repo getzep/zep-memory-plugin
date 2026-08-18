@@ -8,6 +8,9 @@ All notable changes to the Zep Memory plugin.
   same-repo plugin sources. Install with
   `claude plugin marketplace add getzep/zep-memory-plugin` then
   `claude plugin install zep-memory@zep-memory`.
+- Document Cursor as an Agent Plugins host (no extra per-plugin Cursor
+  manifest). Add `.cursor-plugin/marketplace.json` so this repo can be
+  imported as a Cursor team marketplace pointing at `plugins/zep-memory`.
 
 ## 0.2.10 — 2026-08-14
 

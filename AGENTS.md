@@ -2,7 +2,8 @@
 
 This repository hosts marketplace catalogs at the root and **one plugin
 package** at `plugins/zep-memory/`. That directory is the plugin root for
-Agent Plugins 1.0.0, Claude Desktop Chat / Cowork, and ChatGPT Work.
+Agent Plugins 1.0.0 (including Cursor), Claude Desktop Chat / Cowork, and
+ChatGPT Work.
 
 ## Package architecture
 
@@ -27,11 +28,16 @@ Agent Plugins 1.0.0, Claude Desktop Chat / Cowork, and ChatGPT Work.
   positioned for Codex coding workflows.
 - Keep every `.mcp.json` and `mcp.json` pointed at the production Zep Memory MCP
   endpoint `https://api.getzep.com/mcp` (HTTP / `streamable-http` as required).
-- Do not add Cursor packaging unless the product scope explicitly expands.
+- Cursor loads the Agent Plugins package as-is. Do not add
+  `plugins/zep-memory/.cursor-plugin/` unless we need Cursor-only components
+  (rules, agents, commands, hooks, or variables). Auth stays client-managed
+  OAuth; do not put API keys or `${VAR}` headers in `mcp.json`.
 - This repository hosts its own marketplace catalogs
-  (`.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`).
-  Plugin `source` entries must stay same-repo paths so install does not require
-  a second GitHub clone. Both catalogs point at `./plugins/zep-memory`.
+  (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`,
+  and `.cursor-plugin/marketplace.json`). Plugin `source` entries must stay
+  same-repo paths so install does not require a second GitHub clone. Claude
+  and ChatGPT catalogs point at `./plugins/zep-memory`; the Cursor catalog
+  uses `metadata.pluginRoot` `plugins` and `source` `zep-memory`.
 
 ## Releasing
 
@@ -121,3 +127,25 @@ Official public listing. Submit through the OpenAI plugin submission portal
 GitHub does not update the live directory listing by itself. Skills may be
 snapshotted at review time; live MCP tool calls still hit the production
 Memory MCP endpoint.
+
+#### Cursor — local install and team marketplace
+
+Cursor loads Agent Plugins from `plugins/zep-memory/` with no extra per-plugin
+manifest. Local development:
+
+```bash
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)/plugins/zep-memory" ~/.cursor/plugins/local/zep-memory
+```
+
+Reload the Cursor window, then confirm the skill and MCP server under
+**Customize**. The Memory MCP server uses OAuth; the first tool call should
+open Zep sign-in.
+
+- **Team marketplace:** import this GitHub repository. Cursor reads
+  `.cursor-plugin/marketplace.json` and resolves `source` `zep-memory` under
+  `pluginRoot` `plugins`.
+- **Official Cursor Marketplace (later):** submit the repository at
+  [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
+  Inclusion and updates are a Cursor review process, not "merge this repo and
+  it ships."
