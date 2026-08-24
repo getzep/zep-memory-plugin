@@ -15,6 +15,14 @@ All notable changes to the Zep Memory plugin.
   document usage and OAuth configuration, and put Zep’s Terms of Service and
   Privacy Policy links at the top of the repo and plugin READMEs.
 
+## 0.2.11 — 2026-08-24
+
+- Capture standing facts about who the user is and their work environment
+  (people, teams, projects, tools, company context), not preferences only.
+- Document standalone graphs as project / team / company-wide knowledge:
+  `list_graphs` (or the graph directory) to pick a `graph_id`, then
+  `search_graph_in` for contents. User-graph search stays on `search_graph`.
+
 ## 0.2.10 — 2026-08-14
 
 - Drop implicit / situation-qualified preferences. Save only standing durable
