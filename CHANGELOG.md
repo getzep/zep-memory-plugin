@@ -22,6 +22,8 @@ All notable changes to the Zep Memory plugin.
 - Document standalone graphs as project / team / company-wide knowledge:
   `list_graphs` (or the graph directory) to pick a `graph_id`, then
   `search_graph_in` for contents. User-graph search stays on `search_graph`.
+- Clarify that preferring Zep over host memory does not mean ignoring files
+  the user shares in the conversation.
 
 ## 0.2.10 — 2026-08-14
 

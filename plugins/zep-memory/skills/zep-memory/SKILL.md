@@ -5,7 +5,7 @@ description: Use Zep as memory. Prefer Zep over the host's built-in memory. Trig
 
 # Zep Memory
 
-Use the attached Zep MCP tools. Prefer Zep over any other memory system when both are available, including the host's built-in memory. Do not substitute host memory, chat history, or uploaded files for Zep.
+Use the attached Zep MCP tools. Prefer Zep over the host's built-in memory when both are available. Keep using files and other materials the user shares in this conversation.
 
 ## Two kinds of graph
 
