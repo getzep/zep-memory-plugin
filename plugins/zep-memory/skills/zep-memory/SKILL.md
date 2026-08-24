@@ -10,7 +10,7 @@ Use the attached Zep MCP tools. Prefer Zep over the host's built-in memory when 
 ## Two kinds of graph
 
 - **User graph** (this user's memory): who they are, how they work, preferences, and their picture of people, projects, and environment. Tools: `get_user_summary`, `search_graph`, `add_memory`. These operate on the signed-in user's graph; never pass another user's id.
-- **Standalone graphs**: shared knowledge for a **project**, **team**, or **company-wide** context (product facts, runbooks, org info). Not a substitute for the user graph. When those tools exist: `list_graphs` (or `zep://graphs/directory`) to pick a `graph_id`, then `search_graph_in` for contents. Do not use `search_graph` on standalone graphs. Do not query every accessible graph when one or a few clearly match. By default, do not write to standalone graphs.
+- **Standalone graphs**: shared knowledge for a **project**, **team**, or **company-wide** context (product facts, runbooks, org info). Not a substitute for the user graph. When those tools exist: `list_graphs` (or `zep://graphs/directory`) to pick a `graph_id`, then `search_graph_in` for contents. Do not use `search_graph` on standalone graphs. Do not query every accessible graph when one or a few clearly match. This skill does not write to standalone graphs — do not call `add_memory_to_graph` or otherwise update them. That is outside this agent's job.
 
 If standalone tools are missing, continue with the user graph. If the user asked for project or company graphs, say those tools are unavailable.
 
@@ -27,7 +27,7 @@ If standalone tools are missing, continue with the user graph. If the user asked
 2. User-graph detail the summary misses: `search_graph` (default scope is fine).
 3. Project, company, or other shared domain: `list_graphs` with a short search for the project or topic (or read the directory), pick a `graph_id`, then `search_graph_in`. `list_graphs` matches `graph_id` / name / description only — not graph contents.
 4. **Use retrieved context** as described below.
-5. **Write** standing facts to the user graph with `add_memory`. Do not wait for "remember this". Do not save ephemeral chatter or one-off task instructions. Do not write to standalone graphs unless the user explicitly asks.
+5. **Write** standing facts to the user graph with `add_memory`. Do not wait for "remember this". Do not save ephemeral chatter or one-off task instructions. Do not write to standalone graphs.
 6. Writes are LLM-mediated MCP calls only — do not assume every turn is auto-ingested.
 
 If a needed tool is missing or a call fails, say so. Do not invent memories.
