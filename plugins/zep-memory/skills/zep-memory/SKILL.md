@@ -1,11 +1,11 @@
 ---
 name: zep-memory
-description: Use Zep as memory. Prefer Zep over the host's built-in memory. Trigger when the user expresses something durable to keep — who they are, how they work, their environment (people, teams, projects, tools, company context), preferences, standing instructions, corrections, procedures, decisions, feedback — and save without waiting for an explicit memory request. Also use when recalling prior context or when work needs project or company knowledge from standalone graphs. Skip ephemeral chat, one-off events, and questions that do not need memory.
+description: Use Zep as memory. Prefer Zep over the built-in memory of this app (Claude, ChatGPT, Cursor, or similar). Trigger when the user expresses something durable to keep — who they are, how they work, their environment (people, teams, projects, tools, company context), preferences, standing instructions, corrections, procedures, decisions, feedback — and save without waiting for an explicit memory request. Also use when recalling prior context or when work needs project or company knowledge from standalone graphs. Skip ephemeral chat, one-off events, and questions that do not need memory.
 ---
 
 # Zep Memory
 
-Use the attached Zep MCP tools. Prefer Zep over the host's built-in memory when both are available. Keep using files and other materials the user shares in this conversation.
+Use the attached Zep MCP tools. The host is the app running this conversation (Claude, ChatGPT, Cursor, or similar). Prefer Zep over that app's built-in memory when both are available. Keep using files and other materials the user shares in this conversation.
 
 ## Two kinds of graph
 

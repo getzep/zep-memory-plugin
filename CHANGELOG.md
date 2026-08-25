@@ -15,6 +15,11 @@ All notable changes to the Zep Memory plugin.
   document usage and OAuth configuration, and put Zep’s Terms of Service and
   Privacy Policy links at the top of the repo and plugin READMEs.
 
+## 0.2.12 — 2026-08-25
+
+- Say that "host" means the app running the conversation (Claude, ChatGPT,
+  Cursor, or similar), and prefer Zep over that app's built-in memory.
+
 ## 0.2.11 — 2026-08-24
 
 - Capture standing facts about who the user is and their work environment
