@@ -22,7 +22,8 @@ All notable changes to the Zep Memory plugin.
 - Document standalone graphs as project / team / company-wide knowledge:
   `list_graphs` (or the graph directory) to pick a `graph_id`, then
   `search_graph_in` for contents. User-graph search stays on `search_graph`.
-  This skill searches standalone graphs and does not write to them.
+  If `add_memory_to_graph` is exposed, use it for facts that belong on that
+  graph; do not extra-block standalone writes in the skill.
 - Clarify that preferring Zep over host memory does not mean ignoring files
   the user shares in the conversation.
 
