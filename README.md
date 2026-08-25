@@ -36,9 +36,11 @@ context. For example:
 - Save this to my Zep memory.
 
 The skill tells the assistant to prefer Zep over the host’s built-in memory,
-to look up stored context before guessing, and to write durable facts
-(preferences, corrections, procedures, decisions, feedback) without waiting to
-be asked.
+to look up stored context before guessing, and to write standing facts about
+who the user is, their work environment (people, projects, teams), preferences,
+corrections, procedures, decisions, and feedback without waiting to be asked.
+Standalone graphs hold project and company-wide knowledge; search those with
+`list_graphs` then `search_graph_in` when the project enables them.
 
 Install and product docs: [Memory MCP server](https://help.getzep.com/memory-mcp-server).
 
